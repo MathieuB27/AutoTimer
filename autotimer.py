@@ -17,6 +17,11 @@ elif sys.platform in ['linux', 'linux2']:
 active_window_name = ""
 activity_name = ""
 start_time = datetime.datetime.now()
+filename = "activities-" + start_time.strftime("%Y-%m-%d")+".json"
+appstartdate = datetime.datetime.now();
+print(appstartdate.day);
+print(start_time.day);
+print(filename)
 activeList = AcitivyList([])
 first_time = True
 
@@ -96,7 +101,8 @@ try:
                 if not exists:
                     activity = Activity(activity_name, [time_entry])
                     activeList.activities.append(activity)
-                with open('activities.json', 'w') as json_file:
+                
+                with open(filename, 'w') as json_file:
                     json.dump(activeList.serialize(), json_file,
                               indent=4, sort_keys=True)
                     start_time = datetime.datetime.now()
@@ -104,7 +110,8 @@ try:
             active_window_name = new_window_name
 
         time.sleep(1)
-    
+        if appstartdate.day != start_time.day:
+            filename = "activities-" + start_time.strftime("%Y-%m-%d")+".json"
 except KeyboardInterrupt:
-    with open('activities.json', 'w') as json_file:
+    with open(filename, 'w') as json_file:
         json.dump(activeList.serialize(), json_file, indent=4, sort_keys=True)
